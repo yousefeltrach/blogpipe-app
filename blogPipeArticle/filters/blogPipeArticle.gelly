@@ -1,0 +1,4 @@
+fragment Filter($session: Session) on BlogPipeArticle {
+  *
+  [where shopId == $session.shopId]
+}

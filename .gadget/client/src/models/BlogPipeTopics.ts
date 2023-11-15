@@ -1,0 +1,1250 @@
+import {
+  GadgetConnection,
+  GadgetRecord,
+  GadgetRecordImplementation,
+  GadgetRecordList,
+  GadgetNonUniqueDataError,
+  actionRunner,
+  findManyRunner,
+  findOneRunner,
+  findOneByFieldRunner,
+  DefaultSelection,
+  LimitToKnownKeys,
+  Selectable
+} from "@gadgetinc/api-client-core";
+
+import {
+  Query,
+  ExplicitNestingRequired,
+  Select,
+  DeepFilterNever,
+  IDsList,
+      BlogPipeTopics,
+      BlogPipeTopicsSort,
+      BlogPipeTopicsFilter,
+      AvailableBlogPipeTopicsSelection,
+      CreateBlogPipeTopicsInput,
+      UpdateBlogPipeTopicsInput,
+      ActionABlogPipeTopicsInput,
+  
+} from "../types.js";
+
+import { disambiguateActionParams } from "../support.js";
+
+export const DefaultBlogPipeTopicsSelection = {
+  "__typename": true,
+  "createdAt": true,
+  "id": true,
+  "keywords": true,
+  "title": true,
+  "updatedAt": true
+} as const;
+
+/**
+* Produce a type that holds only the selected fields (and nested fields) of "blogPipeTopics". The present fields in the result type of this are dynamic based on the options to each call that uses it.
+* The selected fields are sometimes given by the `Options` at `Options["select"]`, and if a selection isn't made in the options, we use the default selection from above.
+*/
+export type SelectedBlogPipeTopicsOrDefault<Options extends Selectable<AvailableBlogPipeTopicsSelection>> = DeepFilterNever<
+  Select<
+    BlogPipeTopics,
+    DefaultSelection<
+      AvailableBlogPipeTopicsSelection,
+      Options,
+      typeof DefaultBlogPipeTopicsSelection
+    >
+  >>;
+
+/** Options that can be passed to the `BlogPipeTopicsManager#findOne` method */
+export interface FindOneBlogPipeTopicsOptions {
+  /** Select fields other than the defaults of the record to return */
+  select?: AvailableBlogPipeTopicsSelection;
+};
+
+/** Options that can be passed to the `BlogPipeTopicsManager#maybeFindOne` method */
+export interface MaybeFindOneBlogPipeTopicsOptions {
+  /** Select fields other than the defaults of the record to return */
+  select?: AvailableBlogPipeTopicsSelection;
+};
+
+/** Options that can be passed to the `BlogPipeTopicsManager#findMany` method */
+export interface FindManyBlogPipeTopicssOptions {
+  /** Select fields other than the defaults of the record to return */
+  select?: AvailableBlogPipeTopicsSelection;
+  /** Return records sorted by these sorts */
+  sort?: BlogPipeTopicsSort | BlogPipeTopicsSort[] | null;
+  /** Only return records matching these filters. */
+  filter?: BlogPipeTopicsFilter | BlogPipeTopicsFilter[] | null;
+  /** Only return records matching this freeform search string */
+  search?: string | null;
+  first?: number | null;
+  last?: number | null;
+  after?: string | null;
+  before?: string | null;
+};
+
+/** Options that can be passed to the `BlogPipeTopicsManager#findFirst` method */
+export interface FindFirstBlogPipeTopicsOptions {
+  /** Select fields other than the defaults of the record to return */
+  select?: AvailableBlogPipeTopicsSelection;
+  /** Return records sorted by these sorts */
+  sort?: BlogPipeTopicsSort | BlogPipeTopicsSort[] | null;
+  /** Only return records matching these filters. */
+  filter?: BlogPipeTopicsFilter | BlogPipeTopicsFilter[] | null;
+  /** Only return records matching this freeform search string */
+  search?: string | null;
+};
+
+/** Options that can be passed to the `BlogPipeTopicsManager#maybeFindFirst` method */
+export interface MaybeFindFirstBlogPipeTopicsOptions {
+  /** Select fields other than the defaults of the record to return */
+  select?: AvailableBlogPipeTopicsSelection;
+  /** Return records sorted by these sorts */
+  sort?: BlogPipeTopicsSort | BlogPipeTopicsSort[] | null;
+  /** Only return records matching these filters. */
+  filter?: BlogPipeTopicsFilter | BlogPipeTopicsFilter[] | null;
+  /** Only return records matching this freeform search string */
+  search?: string | null;
+};
+
+
+export interface CreateBlogPipeTopicsOptions {
+  /** Select fields other than the defaults of the record to return */
+  select?: AvailableBlogPipeTopicsSelection;
+};
+
+
+export interface UpdateBlogPipeTopicsOptions {
+  /** Select fields other than the defaults of the record to return */
+  select?: AvailableBlogPipeTopicsSelection;
+};
+
+
+export interface DeleteBlogPipeTopicsOptions {
+};
+
+
+export interface ActionABlogPipeTopicsOptions {
+  /** Select fields other than the defaults of the record to return */
+  select?: AvailableBlogPipeTopicsSelection;
+};
+
+
+const apiIdentifier = "blogPipeTopics";
+const pluralApiIdentifier = "blogPipeTopicss";
+
+
+    
+  /**
+   * The fully-qualified, expanded form of the inputs for executing this action.
+   * The flattened style should be preferred over this style, but for models with ambiguous API identifiers, this style can be used to remove any ambiguity.
+   **/
+  export type FullyQualifiedCreateBlogPipeTopicsVariables = {
+          blogPipeTopics?: CreateBlogPipeTopicsInput,
+      }
+
+  /**
+   * The inputs for executing create on blogPipeTopics.
+   * This is the flattened style of inputs, suitable for general use, and should be preferred.
+   **/
+
+    export type CreateBlogPipeTopicsVariables = CreateBlogPipeTopicsInput;
+
+
+
+/**
+ * The return value from executing create on blogPipeTopics.
+ * "Is a GadgetRecord of the model's type."
+ **/
+export type CreateBlogPipeTopicsResult<Options extends CreateBlogPipeTopicsOptions> =
+  SelectedBlogPipeTopicsOrDefault<Options> extends void ? void : GadgetRecord<SelectedBlogPipeTopicsOrDefault<Options>>
+;
+
+
+/**
+  * Executes the create action. Accepts the parameters for the action via the `variables` argument. Runs the action and returns a Promise for the updated record.
+  */
+
+// Flat style overload
+async function createBlogPipeTopics<Options extends CreateBlogPipeTopicsOptions>(
+  
+    variables: CreateBlogPipeTopicsVariables,
+
+  options?: LimitToKnownKeys<Options, CreateBlogPipeTopicsOptions>
+): Promise<CreateBlogPipeTopicsResult<Options>>;
+
+// Fully qualified, nested api identifier overload
+async function createBlogPipeTopics<Options extends CreateBlogPipeTopicsOptions>(
+  
+      variables: FullyQualifiedCreateBlogPipeTopicsVariables,
+  
+  options?: LimitToKnownKeys<Options, CreateBlogPipeTopicsOptions>
+): Promise<CreateBlogPipeTopicsResult<Options>>;
+
+// Function implementation
+async function createBlogPipeTopics<Options extends CreateBlogPipeTopicsOptions>(
+  this: BlogPipeTopicsManager,
+  
+      variables: CreateBlogPipeTopicsVariables | FullyQualifiedCreateBlogPipeTopicsVariables,
+  
+  options?: LimitToKnownKeys<Options, CreateBlogPipeTopicsOptions>
+): Promise<CreateBlogPipeTopicsResult<Options>> {
+    const newVariables = disambiguateActionParams(
+      this["create"],
+       undefined,
+      variables
+    );
+
+  return (await actionRunner<SelectedBlogPipeTopicsOrDefault<Options>>(
+    this,
+    "createBlogPipeTopics",
+    DefaultBlogPipeTopicsSelection,
+    apiIdentifier,
+    apiIdentifier,
+    false,
+    {
+                    "blogPipeTopics": {
+          value: newVariables.blogPipeTopics,
+          required: false,
+          type: "CreateBlogPipeTopicsInput",
+        },
+          },
+    options,
+    null,
+    false
+  ));
+}
+
+  
+    
+  /**
+   * The fully-qualified, expanded form of the inputs for executing this action.
+   * The flattened style should be preferred over this style, but for models with ambiguous API identifiers, this style can be used to remove any ambiguity.
+   **/
+  export type FullyQualifiedUpdateBlogPipeTopicsVariables = {
+          blogPipeTopics?: UpdateBlogPipeTopicsInput,
+      }
+
+  /**
+   * The inputs for executing update on blogPipeTopics.
+   * This is the flattened style of inputs, suitable for general use, and should be preferred.
+   **/
+
+    export type UpdateBlogPipeTopicsVariables = UpdateBlogPipeTopicsInput;
+
+
+
+/**
+ * The return value from executing update on blogPipeTopics.
+ * "Is a GadgetRecord of the model's type."
+ **/
+export type UpdateBlogPipeTopicsResult<Options extends UpdateBlogPipeTopicsOptions> =
+  SelectedBlogPipeTopicsOrDefault<Options> extends void ? void : GadgetRecord<SelectedBlogPipeTopicsOrDefault<Options>>
+;
+
+
+/**
+  * Executes the update action on one record specified by `id`. Runs the action and returns a Promise for the updated record.
+  */
+
+// Flat style overload
+async function updateBlogPipeTopics<Options extends UpdateBlogPipeTopicsOptions>(
+  id: string,
+    variables: UpdateBlogPipeTopicsVariables,
+
+  options?: LimitToKnownKeys<Options, UpdateBlogPipeTopicsOptions>
+): Promise<UpdateBlogPipeTopicsResult<Options>>;
+
+// Fully qualified, nested api identifier overload
+async function updateBlogPipeTopics<Options extends UpdateBlogPipeTopicsOptions>(
+  id: string,
+      variables: FullyQualifiedUpdateBlogPipeTopicsVariables,
+  
+  options?: LimitToKnownKeys<Options, UpdateBlogPipeTopicsOptions>
+): Promise<UpdateBlogPipeTopicsResult<Options>>;
+
+// Function implementation
+async function updateBlogPipeTopics<Options extends UpdateBlogPipeTopicsOptions>(
+  this: BlogPipeTopicsManager,
+  id: string,
+      variables: UpdateBlogPipeTopicsVariables | FullyQualifiedUpdateBlogPipeTopicsVariables,
+  
+  options?: LimitToKnownKeys<Options, UpdateBlogPipeTopicsOptions>
+): Promise<UpdateBlogPipeTopicsResult<Options>> {
+    const newVariables = disambiguateActionParams(
+      this["update"],
+       id,
+      variables
+    );
+
+  return (await actionRunner<SelectedBlogPipeTopicsOrDefault<Options>>(
+    this,
+    "updateBlogPipeTopics",
+    DefaultBlogPipeTopicsSelection,
+    apiIdentifier,
+    apiIdentifier,
+    false,
+    {
+              id: {
+          value: id,
+          required: true,
+          type: "GadgetID",
+        },
+                    "blogPipeTopics": {
+          value: newVariables.blogPipeTopics,
+          required: false,
+          type: "UpdateBlogPipeTopicsInput",
+        },
+          },
+    options,
+    null,
+    false
+  ));
+}
+
+  
+    
+
+/**
+ * The return value from executing delete on blogPipeTopics.
+ * "Is void because this action deletes the record"
+ **/
+export type DeleteBlogPipeTopicsResult<Options extends DeleteBlogPipeTopicsOptions> =
+  void extends void ? void : GadgetRecord<SelectedBlogPipeTopicsOrDefault<Options>>
+;
+
+
+/**
+  * Executes the delete action on one record specified by `id`. Deletes the record on the server. Returns a Promise that resolves if the delete succeeds.
+  */
+
+// Fully qualified, nested api identifier overload
+async function deleteBlogPipeTopics<Options extends DeleteBlogPipeTopicsOptions>(
+  id: string,
+  
+  options?: LimitToKnownKeys<Options, DeleteBlogPipeTopicsOptions>
+): Promise<DeleteBlogPipeTopicsResult<Options>>;
+
+// Function implementation
+async function deleteBlogPipeTopics<Options extends DeleteBlogPipeTopicsOptions>(
+  this: BlogPipeTopicsManager,
+  id: string,
+  
+  options?: LimitToKnownKeys<Options, DeleteBlogPipeTopicsOptions>
+): Promise<DeleteBlogPipeTopicsResult<Options>> {
+
+  return (await actionRunner<void>(
+    this,
+    "deleteBlogPipeTopics",
+    null,
+    apiIdentifier,
+    apiIdentifier,
+    false,
+    {
+              id: {
+          value: id,
+          required: true,
+          type: "GadgetID",
+        },
+                },
+    options,
+    null,
+    false
+  ));
+}
+
+  
+    
+  /**
+   * The fully-qualified, expanded form of the inputs for executing this action.
+   * The flattened style should be preferred over this style, but for models with ambiguous API identifiers, this style can be used to remove any ambiguity.
+   **/
+  export type FullyQualifiedActionABlogPipeTopicsVariables = {
+          blogPipeTopics?: ActionABlogPipeTopicsInput,
+      }
+
+  /**
+   * The inputs for executing actionA on blogPipeTopics.
+   * This is the flattened style of inputs, suitable for general use, and should be preferred.
+   **/
+
+    export type ActionABlogPipeTopicsVariables = ActionABlogPipeTopicsInput;
+
+
+
+/**
+ * The return value from executing actionA on blogPipeTopics.
+ * "Is a GadgetRecord of the model's type."
+ **/
+export type ActionABlogPipeTopicsResult<Options extends ActionABlogPipeTopicsOptions> =
+  SelectedBlogPipeTopicsOrDefault<Options> extends void ? void : GadgetRecord<SelectedBlogPipeTopicsOrDefault<Options>>
+;
+
+
+/**
+  * Executes the actionA action on one record specified by `id`. Runs the action and returns a Promise for the updated record.
+  */
+
+// Flat style overload
+async function actionABlogPipeTopics<Options extends ActionABlogPipeTopicsOptions>(
+  id: string,
+    variables: ActionABlogPipeTopicsVariables,
+
+  options?: LimitToKnownKeys<Options, ActionABlogPipeTopicsOptions>
+): Promise<ActionABlogPipeTopicsResult<Options>>;
+
+// Fully qualified, nested api identifier overload
+async function actionABlogPipeTopics<Options extends ActionABlogPipeTopicsOptions>(
+  id: string,
+      variables: FullyQualifiedActionABlogPipeTopicsVariables,
+  
+  options?: LimitToKnownKeys<Options, ActionABlogPipeTopicsOptions>
+): Promise<ActionABlogPipeTopicsResult<Options>>;
+
+// Function implementation
+async function actionABlogPipeTopics<Options extends ActionABlogPipeTopicsOptions>(
+  this: BlogPipeTopicsManager,
+  id: string,
+      variables: ActionABlogPipeTopicsVariables | FullyQualifiedActionABlogPipeTopicsVariables,
+  
+  options?: LimitToKnownKeys<Options, ActionABlogPipeTopicsOptions>
+): Promise<ActionABlogPipeTopicsResult<Options>> {
+    const newVariables = disambiguateActionParams(
+      this["actionA"],
+       id,
+      variables
+    );
+
+  return (await actionRunner<SelectedBlogPipeTopicsOrDefault<Options>>(
+    this,
+    "actionABlogPipeTopics",
+    DefaultBlogPipeTopicsSelection,
+    apiIdentifier,
+    apiIdentifier,
+    false,
+    {
+              id: {
+          value: id,
+          required: true,
+          type: "GadgetID",
+        },
+                    "blogPipeTopics": {
+          value: newVariables.blogPipeTopics,
+          required: false,
+          type: "ActionABlogPipeTopicsInput",
+        },
+          },
+    options,
+    null,
+    false
+  ));
+}
+
+  
+
+
+
+/** All the actions available at the collection level and record level for "blogPipeTopics" */
+export class BlogPipeTopicsManager {
+  constructor(readonly connection: GadgetConnection) {}
+
+  
+    /**
+ * Finds one blogPipeTopics by ID. Returns a Promise that resolves to the record if found and rejects the promise if the record isn't found.
+ **/
+findOne: {
+  <Options extends FindOneBlogPipeTopicsOptions>(id: string, options?: LimitToKnownKeys<Options, FindOneBlogPipeTopicsOptions>):
+    Promise<
+      GadgetRecord<
+        SelectedBlogPipeTopicsOrDefault<Options>
+      >
+    >;
+  type: "findOne",
+  findByVariableName: "id";
+  operationName: "blogPipeTopics";
+  modelApiIdentifier: "blogPipeTopics";
+  defaultSelection: typeof DefaultBlogPipeTopicsSelection;
+  selectionType: AvailableBlogPipeTopicsSelection;
+  optionsType: FindOneBlogPipeTopicsOptions;
+  schemaType: Query["blogPipeTopics"];
+} = Object.assign(
+  async <Options extends FindOneBlogPipeTopicsOptions>(id: string, options?: LimitToKnownKeys<Options, FindOneBlogPipeTopicsOptions>) => {
+    return await findOneRunner<SelectedBlogPipeTopicsOrDefault<Options>>(
+      this,
+      "blogPipeTopics",
+      id,
+      DefaultBlogPipeTopicsSelection,
+      apiIdentifier,
+      options
+    );
+  },
+  {
+    type: "findOne",
+    findByVariableName: "id",
+    operationName: "blogPipeTopics",
+    modelApiIdentifier: apiIdentifier,
+    defaultSelection: DefaultBlogPipeTopicsSelection,
+  } as any
+)
+
+  
+    /**
+ * Finds one blogPipeTopics by ID. Returns a Promise that resolves to the record if found and rejects the promise if the record isn't found.
+ **/
+maybeFindOne: {
+  <Options extends MaybeFindOneBlogPipeTopicsOptions>(id: string, options?: LimitToKnownKeys<Options, MaybeFindOneBlogPipeTopicsOptions>):
+    Promise<
+      GadgetRecord<
+        SelectedBlogPipeTopicsOrDefault<Options>
+      > | null
+    >;
+  type: "maybeFindOne";
+  findByVariableName: "id";
+  operationName: "blogPipeTopics";
+  modelApiIdentifier: "blogPipeTopics";
+  defaultSelection: typeof DefaultBlogPipeTopicsSelection;
+  selectionType: AvailableBlogPipeTopicsSelection;
+  optionsType: MaybeFindOneBlogPipeTopicsOptions;
+  schemaType: Query["blogPipeTopics"];
+} = Object.assign(
+  async <Options extends MaybeFindOneBlogPipeTopicsOptions>(id: string, options?: LimitToKnownKeys<Options, MaybeFindOneBlogPipeTopicsOptions>) => {
+    const record = await findOneRunner<SelectedBlogPipeTopicsOrDefault<Options>>(
+      this,
+      "blogPipeTopics",
+      id,
+      DefaultBlogPipeTopicsSelection,
+      apiIdentifier,
+      options,
+      false
+    );
+    return record.isEmpty() ? null : record;
+  },
+  {
+    type: "maybeFindOne",
+    findByVariableName: "id",
+    operationName: "blogPipeTopics",
+    modelApiIdentifier: "blogPipeTopics",
+    defaultSelection: DefaultBlogPipeTopicsSelection,
+  } as any
+)
+
+  
+    /**
+ * Finds many blogPipeTopics. Returns a `Promise` for a `GadgetRecordList` of objects according to the passed `options`. Optionally filters the returned records using `filter` option, sorts records using the `sort` option, searches using the `search` options, and paginates using the `last`/`before` and `first`/`after` pagination options.
+ **/
+findMany: {
+  <Options extends FindManyBlogPipeTopicssOptions>(options?: LimitToKnownKeys<Options, FindManyBlogPipeTopicssOptions>):
+    Promise<
+      GadgetRecordList<
+        SelectedBlogPipeTopicsOrDefault<Options>
+      >
+    >;
+  type: "findMany";
+  operationName: "blogPipeTopicss";
+  modelApiIdentifier: "blogPipeTopics";
+  defaultSelection: typeof DefaultBlogPipeTopicsSelection;
+  selectionType: AvailableBlogPipeTopicsSelection;
+  optionsType: FindManyBlogPipeTopicssOptions;
+  schemaType: Query["blogPipeTopics"];
+} = Object.assign(
+  async <Options extends FindManyBlogPipeTopicssOptions>(options?: LimitToKnownKeys<Options, FindManyBlogPipeTopicssOptions>):
+    Promise<
+      GadgetRecordList<
+        SelectedBlogPipeTopicsOrDefault<Options>
+      >
+    > =>
+  {
+    return await findManyRunner<SelectedBlogPipeTopicsOrDefault<Options>>(
+      this,
+      "blogPipeTopicss",
+      DefaultBlogPipeTopicsSelection,
+      "blogPipeTopics",
+      options
+    );
+  },
+  {
+    type: "findMany",
+    operationName: "blogPipeTopicss",
+    modelApiIdentifier: apiIdentifier,
+    defaultSelection: DefaultBlogPipeTopicsSelection,
+  } as any
+);
+
+  
+    /**
+ * Finds the first matching blogPipeTopics. Returns a `Promise` that resolves to a record if found and rejects the promise if a record isn't found, according to the passed `options`. Optionally filters the searched records using `filter` option, sorts records using the `sort` option, searches using the `search` options, and paginates using the `last`/`before` and `first`/`after` pagination options.
+ **/
+findFirst: {
+  <Options extends FindFirstBlogPipeTopicsOptions>(options?: LimitToKnownKeys<Options, FindFirstBlogPipeTopicsOptions>):
+    Promise<
+      GadgetRecord<
+        SelectedBlogPipeTopicsOrDefault<Options>
+      >
+    >;
+  type: "findFirst";
+  operationName: "blogPipeTopicss";
+  modelApiIdentifier: "blogPipeTopics";
+  defaultSelection: typeof DefaultBlogPipeTopicsSelection;
+  selectionType: AvailableBlogPipeTopicsSelection;
+  optionsType: FindFirstBlogPipeTopicsOptions;
+  schemaType: Query["blogPipeTopics"];
+} = Object.assign(
+  async <Options extends FindFirstBlogPipeTopicsOptions>(options?: LimitToKnownKeys<Options, FindFirstBlogPipeTopicsOptions>):
+    Promise<
+      GadgetRecord<
+        SelectedBlogPipeTopicsOrDefault<Options>
+      >
+    > =>
+  {
+    const list = await findManyRunner<SelectedBlogPipeTopicsOrDefault<Options>>(
+      this,
+      "blogPipeTopicss",
+      DefaultBlogPipeTopicsSelection,
+      apiIdentifier,
+      { ...options, first: 1, last: undefined, before: undefined, after: undefined },
+      true
+    );
+    return list[0];
+  },
+  {
+    type: "findFirst",
+    operationName: "blogPipeTopicss",
+    modelApiIdentifier: apiIdentifier,
+    defaultSelection: DefaultBlogPipeTopicsSelection,
+  } as any
+);
+
+  
+    /**
+ * Finds the first matching blogPipeTopics. Returns a `Promise` that resolves to a record if found, or null if a record isn't found, according to the passed `options`. Optionally filters the searched records using `filter` option, sorts records using the `sort` option, searches using the `search` options, and paginates using the `last`/`before` pagination options.
+ **/
+maybeFindFirst: {
+  <Options extends MaybeFindFirstBlogPipeTopicsOptions>(options?: LimitToKnownKeys<Options, MaybeFindFirstBlogPipeTopicsOptions>):
+    Promise<
+      GadgetRecord<
+        SelectedBlogPipeTopicsOrDefault<Options>
+      > | null
+    >;
+  type: "maybeFindFirst";
+  operationName: "blogPipeTopicss";
+  modelApiIdentifier: "blogPipeTopics";
+  defaultSelection: typeof DefaultBlogPipeTopicsSelection;
+  selectionType: AvailableBlogPipeTopicsSelection;
+  optionsType: MaybeFindFirstBlogPipeTopicsOptions;
+  schemaType: Query["blogPipeTopics"];
+} = Object.assign(
+  async <Options extends MaybeFindFirstBlogPipeTopicsOptions>(options?: LimitToKnownKeys<Options, MaybeFindFirstBlogPipeTopicsOptions>):
+    Promise<
+      GadgetRecord<
+        SelectedBlogPipeTopicsOrDefault<Options>
+      > | null
+    > =>
+  {
+    const list = await findManyRunner<SelectedBlogPipeTopicsOrDefault<Options>>(
+      this,
+      "blogPipeTopicss",
+      DefaultBlogPipeTopicsSelection,
+      apiIdentifier,
+      { ...options, first: 1, last: undefined, before: undefined, after: undefined },
+      false
+    );
+    return list?.[0] ?? null;
+  },
+  {
+    type: "maybeFindFirst",
+    operationName: "blogPipeTopicss",
+    modelApiIdentifier: apiIdentifier,
+    defaultSelection: DefaultBlogPipeTopicsSelection,
+  } as any
+);
+
+  
+    /**
+  * Finds one blogPipeTopics by its id. Returns a Promise that resolves to the record if found and rejects the promise if the record isn't found.
+  **/
+findById: {
+  <Options extends FindOneBlogPipeTopicsOptions>(value: string, options?: LimitToKnownKeys<Options, FindOneBlogPipeTopicsOptions>):
+    Promise<
+      GadgetRecord<
+        SelectedBlogPipeTopicsOrDefault<Options>
+      >
+    >;
+  type: "findOne";
+  findByVariableName: "id";
+  operationName: "blogPipeTopicss";
+  modelApiIdentifier: "blogPipeTopics";
+  defaultSelection: typeof DefaultBlogPipeTopicsSelection;
+  selectionType: AvailableBlogPipeTopicsSelection;
+  optionsType: FindOneBlogPipeTopicsOptions;
+  schemaType: Query["blogPipeTopics"];
+} = Object.assign(
+  async <Options extends FindOneBlogPipeTopicsOptions>(value: string, options?: LimitToKnownKeys<Options, FindOneBlogPipeTopicsOptions>):
+    Promise<
+      GadgetRecordImplementation<
+        SelectedBlogPipeTopicsOrDefault<Options>
+      > & SelectedBlogPipeTopicsOrDefault<Options>
+    > =>
+  {
+    return await findOneByFieldRunner<SelectedBlogPipeTopicsOrDefault<Options>>(
+      this,
+      "blogPipeTopicss",
+      "id",
+      value,
+      DefaultBlogPipeTopicsSelection,
+      apiIdentifier,
+      options
+    );
+  },
+  {
+    type: "findOne",
+    findByVariableName: "id",
+    operationName: "blogPipeTopicss",
+    modelApiIdentifier: apiIdentifier,
+    defaultSelection: DefaultBlogPipeTopicsSelection,
+  } as any
+)
+
+  
+    create = Object.assign(createBlogPipeTopics,
+  {
+    type: "action",
+    operationName: "createBlogPipeTopics",
+    namespace: null,
+    modelApiIdentifier: apiIdentifier,
+    modelSelectionField: apiIdentifier,
+    isBulk: false,
+    defaultSelection: DefaultBlogPipeTopicsSelection,
+    variables: {
+      "blogPipeTopics": {
+        required: false,
+        type: "CreateBlogPipeTopicsInput",
+      },
+    },
+    hasAmbiguousIdentifier: false,
+    /** @deprecated -- effects are dead, long live AAC */
+    hasCreateOrUpdateEffect: true,
+    paramOnlyVariables: [],
+    hasReturnType: false,
+    acceptsModelInput: true,
+  } as unknown as {
+    type: "action";
+    operationName: "createBlogPipeTopics";
+    namespace: null;
+    modelApiIdentifier: "blogPipeTopics";
+    modelSelectionField: "blogPipeTopics";
+    isBulk: false;
+    defaultSelection: typeof DefaultBlogPipeTopicsSelection;
+    selectionType: AvailableBlogPipeTopicsSelection;
+    optionsType: CreateBlogPipeTopicsOptions;
+    schemaType:  Query["blogPipeTopics"];
+
+    variablesType: (
+
+      (
+        FullyQualifiedCreateBlogPipeTopicsVariables          | CreateBlogPipeTopicsVariables      )
+    ) | undefined;
+    variables: {
+                    "blogPipeTopics": {
+          required: false;
+          type: "CreateBlogPipeTopicsInput";
+        };
+          };
+    hasAmbiguousIdentifier: false;
+    /** @deprecated -- effects are dead, long live AAC */
+    hasCreateOrUpdateEffect: true;
+    paramOnlyVariables: [];
+    hasReturnType: false;
+    acceptsModelInput: true;
+  }
+)
+
+  
+      /**
+  * Executes the bulkCreate action with the given inputs.
+  */
+  bulkCreate: {
+    <Options extends CreateBlogPipeTopicsOptions>(
+        inputs: (FullyQualifiedCreateBlogPipeTopicsVariables | CreateBlogPipeTopicsVariables)[],
+      options?: LimitToKnownKeys<Options, CreateBlogPipeTopicsOptions>
+    ): Promise<CreateBlogPipeTopicsResult<Options>[]>;
+    type: "action";
+    operationName: "bulkCreateBlogPipeTopics";
+    namespace: null;
+    modelApiIdentifier: "blogPipeTopics";
+    modelSelectionField: "blogPipeTopics";
+    isBulk: true;
+    defaultSelection: typeof DefaultBlogPipeTopicsSelection;
+    selectionType: AvailableBlogPipeTopicsSelection;
+    optionsType: CreateBlogPipeTopicsOptions;
+    schemaType: Query["blogPipeTopics"];
+    variablesType: (FullyQualifiedCreateBlogPipeTopicsVariables | CreateBlogPipeTopicsVariables)[];
+    variables: {
+        inputs: {
+          required: true;
+          type: "[BulkCreateBlogPipeTopicsInput!]";
+        };
+      };
+    hasReturnType: boolean;
+    acceptsModelInput: boolean;
+  } = Object.assign(
+    async <Options extends CreateBlogPipeTopicsOptions>(
+        inputs: (FullyQualifiedCreateBlogPipeTopicsVariables | CreateBlogPipeTopicsVariables)[],
+      options?: LimitToKnownKeys<Options, CreateBlogPipeTopicsOptions>
+    ) => {
+        const fullyQualifiedInputs = inputs.map(input =>
+          disambiguateActionParams(
+            this["create"],
+            undefined,
+            input
+          )
+        );
+      
+      return (await actionRunner<any>(
+        this,
+        "bulkCreateBlogPipeTopics",
+        DefaultBlogPipeTopicsSelection,
+        "blogPipeTopics",
+        "blogPipeTopics",
+        true,
+          {
+            inputs: {
+              value: fullyQualifiedInputs,
+              ...this["bulkCreate"].variables["inputs"]
+            }
+          }
+,
+        options,
+        null,
+        false
+      )) as any[];
+    },
+    {
+      type: "action",
+      operationName: "bulkCreateBlogPipeTopics",
+      namespace: null,
+      modelApiIdentifier: apiIdentifier,
+      modelSelectionField: "blogPipeTopics",
+      isBulk: true,
+      defaultSelection: DefaultBlogPipeTopicsSelection,
+      variables: {
+        inputs: {
+          required: true,
+          type: "[BulkCreateBlogPipeTopicsInput!]",
+        },
+      },
+      hasReturnType: false,
+      acceptsModelInput: true,
+    } as any
+  );
+
+  
+    update = Object.assign(updateBlogPipeTopics,
+  {
+    type: "action",
+    operationName: "updateBlogPipeTopics",
+    namespace: null,
+    modelApiIdentifier: apiIdentifier,
+    modelSelectionField: apiIdentifier,
+    isBulk: false,
+    defaultSelection: DefaultBlogPipeTopicsSelection,
+    variables: {
+      id: {
+        required: true,
+        type: "GadgetID",
+      },
+      "blogPipeTopics": {
+        required: false,
+        type: "UpdateBlogPipeTopicsInput",
+      },
+    },
+    hasAmbiguousIdentifier: false,
+    /** @deprecated -- effects are dead, long live AAC */
+    hasCreateOrUpdateEffect: true,
+    paramOnlyVariables: [],
+    hasReturnType: false,
+    acceptsModelInput: true,
+  } as unknown as {
+    type: "action";
+    operationName: "updateBlogPipeTopics";
+    namespace: null;
+    modelApiIdentifier: "blogPipeTopics";
+    modelSelectionField: "blogPipeTopics";
+    isBulk: false;
+    defaultSelection: typeof DefaultBlogPipeTopicsSelection;
+    selectionType: AvailableBlogPipeTopicsSelection;
+    optionsType: UpdateBlogPipeTopicsOptions;
+    schemaType:  Query["blogPipeTopics"];
+
+    variablesType: (
+        { id: string } &
+
+      (
+        FullyQualifiedUpdateBlogPipeTopicsVariables          | UpdateBlogPipeTopicsVariables      )
+    ) | undefined;
+    variables: {
+              id: {
+          required: true;
+          type: "GadgetID";
+        };
+                    "blogPipeTopics": {
+          required: false;
+          type: "UpdateBlogPipeTopicsInput";
+        };
+          };
+    hasAmbiguousIdentifier: false;
+    /** @deprecated -- effects are dead, long live AAC */
+    hasCreateOrUpdateEffect: true;
+    paramOnlyVariables: [];
+    hasReturnType: false;
+    acceptsModelInput: true;
+  }
+)
+
+  
+      /**
+  * Executes the bulkUpdate action with the given inputs.
+  */
+  bulkUpdate: {
+    <Options extends UpdateBlogPipeTopicsOptions>(
+        inputs: (FullyQualifiedUpdateBlogPipeTopicsVariables | UpdateBlogPipeTopicsVariables & { id: string })[],
+      options?: LimitToKnownKeys<Options, UpdateBlogPipeTopicsOptions>
+    ): Promise<UpdateBlogPipeTopicsResult<Options>[]>;
+    type: "action";
+    operationName: "bulkUpdateBlogPipeTopics";
+    namespace: null;
+    modelApiIdentifier: "blogPipeTopics";
+    modelSelectionField: "blogPipeTopics";
+    isBulk: true;
+    defaultSelection: typeof DefaultBlogPipeTopicsSelection;
+    selectionType: AvailableBlogPipeTopicsSelection;
+    optionsType: UpdateBlogPipeTopicsOptions;
+    schemaType: Query["blogPipeTopics"];
+    variablesType: (FullyQualifiedUpdateBlogPipeTopicsVariables | UpdateBlogPipeTopicsVariables & { id: string })[];
+    variables: {
+        inputs: {
+          required: true;
+          type: "[BulkUpdateBlogPipeTopicsInput!]";
+        };
+      };
+    hasReturnType: boolean;
+    acceptsModelInput: boolean;
+  } = Object.assign(
+    async <Options extends UpdateBlogPipeTopicsOptions>(
+        inputs: (FullyQualifiedUpdateBlogPipeTopicsVariables | UpdateBlogPipeTopicsVariables & { id: string })[],
+      options?: LimitToKnownKeys<Options, UpdateBlogPipeTopicsOptions>
+    ) => {
+        const fullyQualifiedInputs = inputs.map(input =>
+          disambiguateActionParams(
+            this["update"],
+            undefined,
+            input
+          )
+        );
+      
+      return (await actionRunner<any>(
+        this,
+        "bulkUpdateBlogPipeTopics",
+        DefaultBlogPipeTopicsSelection,
+        "blogPipeTopics",
+        "blogPipeTopics",
+        true,
+          {
+            inputs: {
+              value: fullyQualifiedInputs,
+              ...this["bulkUpdate"].variables["inputs"]
+            }
+          }
+,
+        options,
+        null,
+        false
+      )) as any[];
+    },
+    {
+      type: "action",
+      operationName: "bulkUpdateBlogPipeTopics",
+      namespace: null,
+      modelApiIdentifier: apiIdentifier,
+      modelSelectionField: "blogPipeTopics",
+      isBulk: true,
+      defaultSelection: DefaultBlogPipeTopicsSelection,
+      variables: {
+        inputs: {
+          required: true,
+          type: "[BulkUpdateBlogPipeTopicsInput!]",
+        },
+      },
+      hasReturnType: false,
+      acceptsModelInput: true,
+    } as any
+  );
+
+  
+    delete = Object.assign(deleteBlogPipeTopics,
+  {
+    type: "action",
+    operationName: "deleteBlogPipeTopics",
+    namespace: null,
+    modelApiIdentifier: apiIdentifier,
+    modelSelectionField: apiIdentifier,
+    isBulk: false,
+    defaultSelection: null,
+    variables: {
+      id: {
+        required: true,
+        type: "GadgetID",
+      },
+    },
+    hasAmbiguousIdentifier: false,
+    /** @deprecated -- effects are dead, long live AAC */
+    hasCreateOrUpdateEffect: false,
+    paramOnlyVariables: [],
+    hasReturnType: false,
+    acceptsModelInput: false,
+  } as unknown as {
+    type: "action";
+    operationName: "deleteBlogPipeTopics";
+    namespace: null;
+    modelApiIdentifier: "blogPipeTopics";
+    modelSelectionField: "blogPipeTopics";
+    isBulk: false;
+    defaultSelection: null;
+    selectionType: Record<string, never>;
+    optionsType: DeleteBlogPipeTopicsOptions;
+    schemaType:  null ;
+
+    variablesType: (
+        { id: string } &
+
+        {}
+    ) | undefined;
+    variables: {
+              id: {
+          required: true;
+          type: "GadgetID";
+        };
+                };
+    hasAmbiguousIdentifier: false;
+    /** @deprecated -- effects are dead, long live AAC */
+    hasCreateOrUpdateEffect: false;
+    paramOnlyVariables: [];
+    hasReturnType: false;
+    acceptsModelInput: false;
+  }
+)
+
+  
+      /**
+  * Executes the bulkDelete action with the given inputs. Deletes the records on the server.
+  */
+  bulkDelete: {
+    <Options extends DeleteBlogPipeTopicsOptions>(
+        ids: string[],
+      options?: LimitToKnownKeys<Options, DeleteBlogPipeTopicsOptions>
+    ): Promise<DeleteBlogPipeTopicsResult<Options>[]>;
+    type: "action";
+    operationName: "bulkDeleteBlogPipeTopics";
+    namespace: null;
+    modelApiIdentifier: "blogPipeTopics";
+    modelSelectionField: "blogPipeTopics";
+    isBulk: true;
+    defaultSelection: null;
+    selectionType: Record<string, never>;
+    optionsType: DeleteBlogPipeTopicsOptions;
+    schemaType: null;
+    variablesType: IDsList | undefined;
+    variables: {
+        ids: {
+          required: true;
+          type: "[GadgetID!]";
+        };
+      };
+    hasReturnType: boolean;
+    acceptsModelInput: boolean;
+  } = Object.assign(
+    async <Options extends DeleteBlogPipeTopicsOptions>(
+        ids: string[],
+      options?: LimitToKnownKeys<Options, DeleteBlogPipeTopicsOptions>
+    ) => {
+
+      return (await actionRunner<any>(
+        this,
+        "bulkDeleteBlogPipeTopics",
+        null,
+        "blogPipeTopics",
+        "blogPipeTopics",
+        true,
+          {
+            ids: {
+              value: ids,
+              ...this["bulkDelete"].variables["ids"]
+            }
+          }
+,
+        options,
+        null,
+        false
+      )) as any[];
+    },
+    {
+      type: "action",
+      operationName: "bulkDeleteBlogPipeTopics",
+      namespace: null,
+      modelApiIdentifier: apiIdentifier,
+      modelSelectionField: "blogPipeTopics",
+      isBulk: true,
+      defaultSelection: null,
+      variables: {
+        ids: {
+          required: true,
+          type: "[GadgetID!]",
+        },
+      },
+      hasReturnType: false,
+      acceptsModelInput: false,
+    } as any
+  );
+
+  
+    actionA = Object.assign(actionABlogPipeTopics,
+  {
+    type: "action",
+    operationName: "actionABlogPipeTopics",
+    namespace: null,
+    modelApiIdentifier: apiIdentifier,
+    modelSelectionField: apiIdentifier,
+    isBulk: false,
+    defaultSelection: DefaultBlogPipeTopicsSelection,
+    variables: {
+      id: {
+        required: true,
+        type: "GadgetID",
+      },
+      "blogPipeTopics": {
+        required: false,
+        type: "ActionABlogPipeTopicsInput",
+      },
+    },
+    hasAmbiguousIdentifier: false,
+    /** @deprecated -- effects are dead, long live AAC */
+    hasCreateOrUpdateEffect: true,
+    paramOnlyVariables: [],
+    hasReturnType: false,
+    acceptsModelInput: true,
+  } as unknown as {
+    type: "action";
+    operationName: "actionABlogPipeTopics";
+    namespace: null;
+    modelApiIdentifier: "blogPipeTopics";
+    modelSelectionField: "blogPipeTopics";
+    isBulk: false;
+    defaultSelection: typeof DefaultBlogPipeTopicsSelection;
+    selectionType: AvailableBlogPipeTopicsSelection;
+    optionsType: ActionABlogPipeTopicsOptions;
+    schemaType:  Query["blogPipeTopics"];
+
+    variablesType: (
+        { id: string } &
+
+      (
+        FullyQualifiedActionABlogPipeTopicsVariables          | ActionABlogPipeTopicsVariables      )
+    ) | undefined;
+    variables: {
+              id: {
+          required: true;
+          type: "GadgetID";
+        };
+                    "blogPipeTopics": {
+          required: false;
+          type: "ActionABlogPipeTopicsInput";
+        };
+          };
+    hasAmbiguousIdentifier: false;
+    /** @deprecated -- effects are dead, long live AAC */
+    hasCreateOrUpdateEffect: true;
+    paramOnlyVariables: [];
+    hasReturnType: false;
+    acceptsModelInput: true;
+  }
+)
+
+  
+      /**
+  * Executes the bulkActionA action with the given inputs.
+  */
+  bulkActionA: {
+    <Options extends ActionABlogPipeTopicsOptions>(
+        inputs: (FullyQualifiedActionABlogPipeTopicsVariables | ActionABlogPipeTopicsVariables & { id: string })[],
+      options?: LimitToKnownKeys<Options, ActionABlogPipeTopicsOptions>
+    ): Promise<ActionABlogPipeTopicsResult<Options>[]>;
+    type: "action";
+    operationName: "bulkActionABlogPipeTopics";
+    namespace: null;
+    modelApiIdentifier: "blogPipeTopics";
+    modelSelectionField: "blogPipeTopics";
+    isBulk: true;
+    defaultSelection: typeof DefaultBlogPipeTopicsSelection;
+    selectionType: AvailableBlogPipeTopicsSelection;
+    optionsType: ActionABlogPipeTopicsOptions;
+    schemaType: Query["blogPipeTopics"];
+    variablesType: (FullyQualifiedActionABlogPipeTopicsVariables | ActionABlogPipeTopicsVariables & { id: string })[];
+    variables: {
+        inputs: {
+          required: true;
+          type: "[BulkActionABlogPipeTopicsInput!]";
+        };
+      };
+    hasReturnType: boolean;
+    acceptsModelInput: boolean;
+  } = Object.assign(
+    async <Options extends ActionABlogPipeTopicsOptions>(
+        inputs: (FullyQualifiedActionABlogPipeTopicsVariables | ActionABlogPipeTopicsVariables & { id: string })[],
+      options?: LimitToKnownKeys<Options, ActionABlogPipeTopicsOptions>
+    ) => {
+        const fullyQualifiedInputs = inputs.map(input =>
+          disambiguateActionParams(
+            this["actionA"],
+            undefined,
+            input
+          )
+        );
+      
+      return (await actionRunner<any>(
+        this,
+        "bulkActionABlogPipeTopics",
+        DefaultBlogPipeTopicsSelection,
+        "blogPipeTopics",
+        "blogPipeTopics",
+        true,
+          {
+            inputs: {
+              value: fullyQualifiedInputs,
+              ...this["bulkActionA"].variables["inputs"]
+            }
+          }
+,
+        options,
+        null,
+        false
+      )) as any[];
+    },
+    {
+      type: "action",
+      operationName: "bulkActionABlogPipeTopics",
+      namespace: null,
+      modelApiIdentifier: apiIdentifier,
+      modelSelectionField: "blogPipeTopics",
+      isBulk: true,
+      defaultSelection: DefaultBlogPipeTopicsSelection,
+      variables: {
+        inputs: {
+          required: true,
+          type: "[BulkActionABlogPipeTopicsInput!]",
+        },
+      },
+      hasReturnType: false,
+      acceptsModelInput: true,
+    } as any
+  );
+
+  
+}

@@ -1,0 +1,5 @@
+
+fragment Filter($session: Session) on ShopifyComment {
+  *
+  [where shopId == $session.shopId]
+}
